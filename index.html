@@ -16,13 +16,13 @@
     
     <!-- [채널톡 스크립트 붙여넣기 시작] -->
     <!-- 이곳에 채널톡에서 발급받은 스크립트 전체를 복사해서 붙여넣으세요. -->
-   <script>
-  (function(){var w=window;if(w.ChannelIO){return w.console.error("ChannelIO script included twice.");}var ch=function(){ch.c(arguments);};ch.q=[];ch.c=function(args){ch.q.push(args);};w.ChannelIO=ch;function l(){if(w.ChannelIOInitialized){return;}w.ChannelIOInitialized=true;var s=document.createElement("script");s.type="text/javascript";s.async=true;s.src="https://cdn.channel.io/plugin/ch-plugin-web.js";var x=document.getElementsByTagName("script")[0];if(x.parentNode){x.parentNode.insertBefore(s,x);}}if(document.readyState==="complete"){l();}else{w.addEventListener("DOMContentLoaded",l);w.addEventListener("load",l);}})();
-
-  ChannelIO('boot', {
-    "pluginKey": "e7d7395a-33a7-4e08-92c9-aae4d6549459"
-  });
-</script>
+    <script>
+      /* (function(){var w=window;if(w.ChannelIO){return w.console.error("ChannelIO script included twice.");}var ch=function(){ch.c(arguments);};ch.q=[];ch.c=function(args){ch.q.push(args);};w.ChannelIO=ch;function l(){if(w.ChannelIOInitialized){return;}w.ChannelIOInitialized=true;var s=document.createElement("script");s.type="text/javascript";s.async=true;s.src="https://cdn.channel.io/plugin/ch-plugin-web.js";var x=document.getElementsByTagName("script")[0];if(x.parentNode){x.parentNode.insertBefore(s,x);}}if(document.readyState==="complete"){l();}else{w.addEventListener("DOMContentLoaded",l);w.addEventListener("load",l);}})();
+      ChannelIO('boot', {
+        "pluginKey": "YOUR_PLUGIN_KEY" 
+      });
+      */
+    </script>
     <!-- [채널톡 스크립트 붙여넣기 끝] -->
 
     <style>
@@ -305,9 +305,27 @@
                                     </p>
                                 </div>
                                 <div className="lg:w-1/2 w-full grid grid-cols-1 gap-6">
-                                    <PriceRow model="Nova 15 Pro" price="0원" isHot={true} />
-                                    <PriceRow model="Nova 15 Lite" price="마이너스폰" isHot={false} />
-                                    <PriceRow model="Nova Fold 6" price="최대지원" isHot={false} />
+                                    <PriceRow 
+                                        model="Nova 15 Pro" 
+                                        price="0원" 
+                                        isHot={true} 
+                                        image="https://images.unsplash.com/photo-1616348436168-de43ad0db179?auto=format&fit=crop&q=80&w=200"
+                                        onClick={handleConsultation}
+                                    />
+                                    <PriceRow 
+                                        model="Nova 15 Lite" 
+                                        price="마이너스폰" 
+                                        isHot={false} 
+                                        image="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&q=80&w=200"
+                                        onClick={handleConsultation}
+                                    />
+                                    <PriceRow 
+                                        model="Nova Fold 6" 
+                                        price="최대지원" 
+                                        isHot={false} 
+                                        image="https://images.unsplash.com/photo-1556656793-062ff9878273?auto=format&fit=crop&q=80&w=200"
+                                        onClick={handleConsultation}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -319,7 +337,7 @@
                             <div className="max-w-6xl mx-auto bg-white rounded-[4rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)] flex flex-col lg:flex-row">
                                 <div className="lg:w-1/2 p-12 md:p-24 bg-slate-900 text-white flex flex-col justify-center">
                                     <h2 className="text-4xl md:text-5xl font-black mb-10 leading-tight">
-                                        5초 신청으로 <br/> <span className="text-blue-500">인생 최저가</span>를 <br/> 확인하세요.
+                                        5초 신청으로 <br/> <span className="text-blue-500">인생 최저가</span>를 <br /> 확인하세요.
                                     </h2>
                                     <ul className="space-y-6">
                                         <li className="flex items-center gap-4 text-slate-300 font-bold text-lg">
@@ -418,11 +436,11 @@
             </div>
         );
 
-        const PriceRow = ({ model, price, isHot }) => (
-            <div className="flex items-center justify-between p-8 rounded-[2.5rem] bg-white/5 border border-white/10 hover:bg-white/10 transition-all group cursor-pointer">
+        const PriceRow = ({ model, price, isHot, image, onClick }) => (
+            <div onClick={onClick} className="flex items-center justify-between p-8 rounded-[2.5rem] bg-white/5 border border-white/10 hover:bg-white/10 transition-all group cursor-pointer">
                 <div className="flex items-center gap-6">
-                    <div className="w-14 h-14 bg-slate-800 rounded-2xl flex items-center justify-center font-black group-hover:bg-blue-600">
-                        <Icon name="smartphone" size={24} />
+                    <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center overflow-hidden shrink-0">
+                        <img src={image} alt={model} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                     </div>
                     <div>
                         <p className="font-black text-xl flex items-center gap-3">
@@ -443,4 +461,3 @@
     </script>
 </body>
 </html>
-
