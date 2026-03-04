@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOVA MOBILE - 프리미엄 휴대폰 랜딩페이지</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React & ReactDOM CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .tabular-nums { font-variant-numeric: tabular-nums; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // 아이콘 컴포넌트 헬퍼 (Lucide)
+        const Icon = ({ name, size = 24, strokeWidth = 2, className = "", fill = "none" }) => {
+            useEffect(() => {
+                lucide.createIcons();
+            }, []);
+            return <i data-lucide={name} style={{ width: size, height: size }} className={className} stroke-width={strokeWidth} fill={fill}></i>;
+        };
+
+        const App = () => {
+            const [isScrolled, setIsScrolled] = useState(false);
+            const [isMenuOpen, setIsMenuOpen] = useState(false);
+            const [timeLeft, setTimeLeft] = useState({ hours: 23, minutes: 59, seconds: 59 });
+            const [formData, setFormData] = useState({
+                name: '',
+                phone: '',
+                model: 'Nova 15 Pro',
+                plan: '무제한 5G'
+            });
+
+            // 카운트다운 타이머 효과
+            useEffect(() => {
+                const timer = setInterval(() => {
+                    setTimeLeft(prev => {
+                        if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
+                        if (prev.minutes > 0) return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
+                        if (prev.hours > 0) return { ...prev, hours: prev.hours - 1, minutes: 59, seconds: 59 };
+                        return prev;
+                    });
+                }, 1000);
+                return () => clearInterval(timer);
+            }, []);
+
+            // 스크롤 감지
+            useEffect(() => {
+                const handleScroll = () => {
+                    setIsScrolled(window.scrollY > 50);
+                };
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                const modal = document.createElement('div');
+                modal.className = "fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm";
+                modal.innerHTML = `
+                    <div class="bg-white p-8 rounded-3xl shadow-2xl text-center max-w-sm mx-4">
+                        <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">${formData.name}님 접수 완료!</h3>
+                        <p class="text-slate-500 mb-6">최적의 견적을 준비하여 5분 이내로 연락드리겠습니다.</p>
+                        <button id="closeModal" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold">확인</button>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+                document.getElementById('closeModal').onclick = () => {
+                    document.body.removeChild(modal);
+                };
+                setFormData({ name: '', phone: '', model: 'Nova 15 Pro', plan: '무제한 5G' });
+            };
+
+            const handleChange = (e) => {
+                setFormData({ ...formData, [e.target.name]: e.target.value });
+            };
+
+            const scrollTo = (id) => {
+                const el = document.getElementById(id);
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+                setIsMenuOpen(false);
+            };
+
+            return (
+                <div className="min-h-screen bg-white text-slate-900 overflow-x-hidden">
+                    {/* 상단 띠 배너 */}
+                    <div className="bg-blue-600 text-white py-2 px-4 text-center text-sm font-bold flex justify-center items-center gap-4">
+                        <span className="flex items-center gap-1"><Icon name="clock" size={16}/> 오늘만 종료까지:</span>
+                        <span className="bg-white text-blue-600 px-2 py-0.5 rounded tabular-nums">
+                            {String(timeLeft.hours).padStart(2, '0')}:{String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}
+                        </span>
+                        <span className="hidden sm:inline">| 역대급 공시지원금 상향 조정 완료!</span>
+                    </div>
+
+                    {/* Navigation */}
